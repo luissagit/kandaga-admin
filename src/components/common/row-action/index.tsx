@@ -1,0 +1,72 @@
+import { Button, Tooltip } from 'antd';
+import { PiEyeBold, PiNotePencilBold, PiTrashBold } from 'react-icons/pi';
+
+export interface RowActionProps {
+  item: any;
+
+  showUpdate?: boolean;
+  showDelete?: boolean;
+  showDetail?: boolean;
+
+  handleUpdate?(item: any): Promise<void>;
+  handleDelete?(item: any): Promise<void>;
+  handleDetail?(item: any): Promise<void>;
+}
+
+export function RowAction(props: RowActionProps): React.ReactNode {
+  const item = props?.item;
+  const showUpdate = props?.showUpdate ?? true;
+  const showDelete = props?.showDelete ?? true;
+  const showDetail = props?.showDetail ?? true;
+  const handleUpdate = props?.handleUpdate;
+  const handleDelete = props?.handleDelete;
+  const handleDetail = props?.handleDetail;
+
+  async function onClickUpdate() {
+    if (handleUpdate) {
+      await handleUpdate(item);
+    }
+  }
+
+  async function onClickDelete() {
+    if (handleDelete) {
+      await handleDelete(item);
+    }
+  }
+
+  async function onClickDetail() {
+    if (handleDetail) {
+      await handleDetail(item);
+    }
+  }
+
+  return (
+    <div className="flex gap-2 items-center">
+      {showDetail && (
+        <Tooltip title="Detail">
+          <Button
+            color="lime"
+            variant="outlined"
+            icon={<PiEyeBold />}
+            onClick={onClickDetail}
+          />
+        </Tooltip>
+      )}
+      {showUpdate && (
+        <Tooltip title="Update">
+          <Button
+            color="blue"
+            variant="outlined"
+            icon={<PiNotePencilBold />}
+            onClick={onClickUpdate}
+          />
+        </Tooltip>
+      )}
+      {showDelete && (
+        <Tooltip title="Detele">
+          <Button danger icon={<PiTrashBold />} onClick={onClickDelete} />
+        </Tooltip>
+      )}
+    </div>
+  );
+}
