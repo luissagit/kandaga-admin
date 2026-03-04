@@ -5,7 +5,7 @@ import {
   type ConfirmationModalProps,
   type RowActionProps,
 } from '@/components';
-import { useModuleContext } from '@/features/app/company/context';
+import { useModuleContext } from '@/context/base-module.context';
 import { notification, Table, type TableProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
@@ -82,21 +82,22 @@ export function IndexTable(props: IndexTableProps) {
       pageSize: pagination?.pageSize,
       total: pagination?.total,
       onChange(page, pageSize) {
-        setPagination({
+        const params = {
           current: page,
           pageSize: pageSize,
-        });
-        getData();
+        };
+        setPagination(params);
+        getData(params);
       },
     },
   };
 
-  async function getData() {
+  async function getData(params?: any) {
     try {
       setLoading(true);
       const { data, paging } = await service.getIndex({
-        page: pagination?.current,
-        size: pagination?.pageSize,
+        page: params?.current ?? pagination?.current,
+        size: params?.pageSize ?? pagination?.pageSize,
       });
       if (data) {
         setDataIndex(data);
@@ -147,8 +148,11 @@ export function IndexTable(props: IndexTableProps) {
 
   async function handleConfirmModalAction(item: any) {
     try {
-      const response = await service.delete(item?.id);
-      console.log(response);
+      const { data } = await service.delete(item?.id);
+      if (data) {
+        handleCancelModalAction();
+        getData();
+      }
     } catch (error: any) {
       notification.error({
         title: error?.message,

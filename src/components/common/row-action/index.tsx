@@ -2,11 +2,11 @@ import { Button, Tooltip } from 'antd';
 import { PiEyeBold, PiNotePencilBold, PiTrashBold } from 'react-icons/pi';
 
 export interface RowActionProps {
-  item: any;
+  item?: any;
 
-  showUpdate?: boolean;
-  showDelete?: boolean;
-  showDetail?: boolean;
+  showUpdate?(item: any): boolean;
+  showDelete?(item: any): boolean;
+  showDetail?(item: any): boolean;
 
   handleUpdate?(item: any): Promise<void>;
   handleDelete?(item: any): Promise<void>;
@@ -15,12 +15,16 @@ export interface RowActionProps {
 
 export function RowAction(props: RowActionProps): React.ReactNode {
   const item = props?.item;
-  const showUpdate = props?.showUpdate ?? true;
-  const showDelete = props?.showDelete ?? true;
-  const showDetail = props?.showDetail ?? true;
+  const showUpdate = props?.showUpdate;
+  const showDelete = props?.showDelete;
+  const showDetail = props?.showDetail;
   const handleUpdate = props?.handleUpdate;
   const handleDelete = props?.handleDelete;
   const handleDetail = props?.handleDetail;
+
+  const isShowUpdate = showUpdate ? showUpdate(item) : true;
+  const isShowDelete = showDelete ? showDelete(item) : true;
+  const isShowDetail = showDetail ? showDetail(item) : true;
 
   async function onClickUpdate() {
     if (handleUpdate) {
@@ -42,7 +46,7 @@ export function RowAction(props: RowActionProps): React.ReactNode {
 
   return (
     <div className="flex gap-2 items-center">
-      {showDetail && (
+      {isShowDetail && (
         <Tooltip title="Detail">
           <Button
             color="lime"
@@ -52,7 +56,7 @@ export function RowAction(props: RowActionProps): React.ReactNode {
           />
         </Tooltip>
       )}
-      {showUpdate && (
+      {isShowUpdate && (
         <Tooltip title="Update">
           <Button
             color="blue"
@@ -62,7 +66,7 @@ export function RowAction(props: RowActionProps): React.ReactNode {
           />
         </Tooltip>
       )}
-      {showDelete && (
+      {isShowDelete && (
         <Tooltip title="Detele">
           <Button danger icon={<PiTrashBold />} onClick={onClickDelete} />
         </Tooltip>

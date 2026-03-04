@@ -6,6 +6,9 @@ const LoginPage = React.lazy(() => import('@/features/auth/login'));
 
 const AppPage = React.lazy(() => import('@/features/app'));
 const CompanyPage = React.lazy(() => import('@/features/app/company'));
+const UserCategoryPage = React.lazy(
+  () => import('@/features/app/user-category'),
+);
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: WEB_URL.COMPANY + '/*',
         element: <CompanyPage />,
+      },
+      {
+        path: WEB_URL.USER_CATEGORY + '/*',
+        element: <UserCategoryPage />,
       },
     ],
   },

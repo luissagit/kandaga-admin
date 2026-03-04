@@ -15,6 +15,7 @@ export const SUB_MODULE = {
   [MODULE.USER_MANAGEMENT]: {
     USER: 'user',
     USER_CATEGORY: 'user_category',
+    ACCESS_RIGHT: 'access_right',
   },
   [MODULE.TRANSACTION]: {
     DOCUMENT: 'document',

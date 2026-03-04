@@ -1,13 +1,6 @@
-import { useModuleContext } from '@/features/app/company/context';
+import { useModuleContext } from '@/context/base-module.context';
 import { HomeOutlined } from '@ant-design/icons';
-import {
-  Breadcrumb,
-  Button,
-  Form,
-  notification,
-  Spin,
-  type FormProps,
-} from 'antd';
+import { Breadcrumb, Button, Form, Spin, type FormProps } from 'antd';
 import type {
   BreadcrumbItemType,
   BreadcrumbSeparatorType,
@@ -16,19 +9,27 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { PiArrowCircleLeftBold, PiFloppyDiskBold } from 'react-icons/pi';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { notificationFailed } from '../common';
+import { useAuthStore } from '@/stores';
+import type { Transformer } from '@/types';
 
 interface Props {
   children: React.ReactNode;
   breadcrumbItems?: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[];
   formProps?: FormProps;
+  transformer?: Transformer;
 }
 
 export function FormPageWrapper(props: Props) {
   const children = props?.children;
   const formProps = props?.formProps;
+  const transformer = props?.transformer;
   // const breadcrumbItems = props?.breadcrumbItems ?? [];
 
+  const user = useAuthStore();
   const navigate = useNavigate();
+
+  const company = user?.auth?.company;
 
   const { id } = useParams();
   const { pathname } = useLocation();
@@ -58,8 +59,8 @@ export function FormPageWrapper(props: Props) {
       const { data } = await service.getDetail(id);
       return data;
     } catch (error: any) {
-      notification.error({
-        title: error?.message,
+      notificationFailed({
+        message: error?.message,
       });
     } finally {
       setLoading(false);
@@ -72,6 +73,9 @@ export function FormPageWrapper(props: Props) {
       form.setFieldsValue(data);
     } else {
       form.resetFields();
+      form.setFieldsValue({
+        company_id: company?.id,
+      });
     }
   }
 
@@ -80,16 +84,22 @@ export function FormPageWrapper(props: Props) {
       setLoadingSave(true);
       let response = null;
       if (isUpdate && id) {
-        response = await service.update(id, payload);
+        const transformedPayload = transformer?.update
+          ? transformer?.update(payload)
+          : payload;
+        response = await service.update(id, transformedPayload);
       } else {
-        response = await service.create(payload);
+        const transformedPayload = transformer?.create
+          ? transformer?.create(payload)
+          : payload;
+        response = await service.create(transformedPayload);
       }
       if (response?.data) {
         navigate(`${webUrl}/detail/${response?.data?.id}`);
       }
     } catch (error: any) {
-      notification.error({
-        title: error?.message,
+      notificationFailed({
+        message: error?.message,
       });
     } finally {
       setLoadingSave(false);
@@ -148,6 +158,7 @@ export function FormPageWrapper(props: Props) {
           </div>
           <Spin spinning={loading || loadingSave}>
             {children}
+            <Form.Item name={['company_id']} noStyle></Form.Item>
             <div className="absolute"></div>
           </Spin>
         </div>

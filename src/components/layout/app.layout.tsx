@@ -63,7 +63,7 @@ export function AppLayout(props: Props) {
           label: 'User',
         },
         {
-          key: '3.2',
+          key: WEB_URL.USER_CATEGORY,
           icon: <PiUserListBold />,
           label: 'User Category',
         },
@@ -137,7 +137,7 @@ export function AppLayout(props: Props) {
           </div>
         </Header>
         <Content className="sm:p-3 lg:p-5">
-          <div className="bg-white rounded-md h-full sm:p-3 lg:p-5">
+          <div className="bg-white rounded-md h-full sm:p-3 lg:p-5 overflow-auto">
             {children}
           </div>
         </Content>

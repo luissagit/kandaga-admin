@@ -2,6 +2,15 @@ import type { Pagination } from '@/types';
 import { Form, type FormInstance } from 'antd';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
+// --- INTERFACES ---
+
+interface ProviderConfig<S> {
+  service: S;
+  webUrl: string;
+  subModule: string;
+  subModuleTitle: string;
+}
+
 interface BaseContextType<T, S> {
   dataIndex: T[];
   setDataIndex: (data: T[]) => void;
@@ -24,14 +33,30 @@ interface BaseContextType<T, S> {
   config: ProviderConfig<S>;
 }
 
-interface ProviderConfig<S> {
-  service: S;
-  webUrl: string;
-  subModule: string;
-  subModuleTitle: string;
-}
+// --- GLOBAL BRIDGE ---
+// Jembatan agar komponen generic bisa akses context tanpa tahu modul spesifiknya
+const ModuleContextShared = createContext<
+  BaseContextType<any, any> | undefined
+>(undefined);
+
+/**
+ * Hook ini digunakan untuk komponen generic (seperti IndexPageWrapper / FormWrapper)
+ * agar tidak perlu import dari folder fitur (company/user/dll)
+ */
+export const useModuleContext = <T = any, S = any>() => {
+  const context = useContext(ModuleContextShared);
+  if (!context) {
+    throw new Error(
+      'useModuleContext harus digunakan di dalam Provider modul masing-masing.',
+    );
+  }
+  return context as BaseContextType<T, S>;
+};
+
+// --- FACTORY FUNCTION ---
 
 export function createModuleContext<T, S>() {
+  // Context internal untuk modul spesifik (untuk menjaga Type Safety)
   const Context = createContext<BaseContextType<T, S> | undefined>(undefined);
 
   const Provider = ({
@@ -49,35 +74,41 @@ export function createModuleContext<T, S>() {
     });
     const [filterDataIndex, setFilterDataIndex] = useState<any>(null);
     const [selectedDataIndex, setSelectedDataIndex] = useState<T[]>([]);
-
     const [dataDetail, setDataDetail] = useState<T>({} as T);
 
     const [form] = Form.useForm();
     const [formDetail] = Form.useForm();
 
+    const value: BaseContextType<T, S> = {
+      dataIndex,
+      setDataIndex,
+      selectedDataIndex,
+      setSelectedDataIndex,
+      filterDataIndex,
+      setFilterDataIndex,
+      pagination,
+      setPagination,
+      dataDetail,
+      setDataDetail,
+      form,
+      formDetail,
+      config,
+    };
+
     return (
-      <Context.Provider
-        value={{
-          dataIndex,
-          setDataIndex,
-          selectedDataIndex,
-          setSelectedDataIndex,
-          filterDataIndex,
-          setFilterDataIndex,
-          pagination,
-          setPagination,
-          dataDetail,
-          setDataDetail,
-          form,
-          formDetail,
-          config,
-        }}
-      >
-        {children}
+      <Context.Provider value={value}>
+        {/* Kita bungkus lagi dengan Shared Provider untuk akses global */}
+        <ModuleContextShared.Provider value={value}>
+          {children}
+        </ModuleContextShared.Provider>
       </Context.Provider>
     );
   };
 
+  /**
+   * Hook ini digunakan khusus di dalam folder fitur/modul terkait
+   * agar mendapatkan auto-complete (Type Safety) yang akurat.
+   */
   const useModule = () => {
     const context = useContext(Context);
     if (!context) {

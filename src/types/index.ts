@@ -28,3 +28,8 @@ export interface GetIndexResponse<T> {
   data: T[];
   paging: PaginationResponse;
 }
+
+export interface Transformer {
+  create?(payload: any): any;
+  update?(payload: any): any;
+}

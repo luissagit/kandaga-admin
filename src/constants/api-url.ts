@@ -8,4 +8,6 @@ export const API_URL = {
   [`${SUB_MODULE[MODULE.USER_MANAGEMENT]['USER_CATEGORY']}`]:
     '/user-categories',
   [`${SUB_MODULE[MODULE.TRANSACTION]['DOCUMENT']}`]: '/documents',
+
+  [`${SUB_MODULE[MODULE.USER_MANAGEMENT]['ACCESS_RIGHT']}`]: '/access-rights',
 };

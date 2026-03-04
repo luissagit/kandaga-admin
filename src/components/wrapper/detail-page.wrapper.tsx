@@ -1,4 +1,4 @@
-import { useModuleContext } from '@/features/app/company/context';
+import { useModuleContext } from '@/context/base-module.context';
 import { HomeOutlined } from '@ant-design/icons';
 import {
   Breadcrumb,
@@ -13,8 +13,13 @@ import type {
   BreadcrumbSeparatorType,
 } from 'antd/es/breadcrumb/Breadcrumb';
 import { useEffect, useState } from 'react';
-import { PiArrowCircleLeftBold, PiNotePencilBold } from 'react-icons/pi';
+import {
+  PiArrowCircleLeftBold,
+  PiNotePencilBold,
+  PiTrashBold,
+} from 'react-icons/pi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ConfirmationModal, type ConfirmationModalProps } from '../common';
 
 interface Props {
   children: React.ReactNode;
@@ -33,6 +38,14 @@ export function DetailPageWrapper(props: Props) {
   const { config, formDetail } = useModuleContext();
 
   const [loading, setLoading] = useState(false);
+  const [confirmationModal, setConfirmationModal] =
+    useState<ConfirmationModalProps>({
+      title: '',
+      item: null,
+      description: '',
+      handleConfirm: handleConfirmModalAction,
+      handleCancel: handleCancelModalAction,
+    });
 
   const formTitle = 'Detail';
   const service = config?.service;
@@ -62,6 +75,43 @@ export function DetailPageWrapper(props: Props) {
       });
     } finally {
       setLoading(false);
+    }
+  }
+
+  function onClickDelete() {
+    const item = formDetail.getFieldsValue();
+    setConfirmationModal({
+      ...confirmationModal,
+      item: item,
+      open: true,
+      danger: true,
+      title: `Delete ${subModuleTitle} Confirmation`,
+      description: `Are you sure want to delete data with code ${item?.code}`,
+    });
+  }
+
+  async function handleCancelModalAction() {
+    setConfirmationModal({
+      ...confirmationModal,
+      item: null,
+      open: false,
+      title: '',
+      description: '',
+      danger: false,
+    });
+  }
+
+  async function handleConfirmModalAction(item: any) {
+    try {
+      const { data } = await service.delete(item?.id);
+      if (data) {
+        handleCancelModalAction();
+        navigate(webUrl);
+      }
+    } catch (error: any) {
+      notification.error({
+        title: error?.message,
+      });
     }
   }
 
@@ -104,6 +154,9 @@ export function DetailPageWrapper(props: Props) {
             >
               Update
             </Button>
+            <Button danger icon={<PiTrashBold />} onClick={onClickDelete}>
+              Delete
+            </Button>
             <Button icon={<PiArrowCircleLeftBold />} onClick={onClickBack}>
               Kembali
             </Button>
@@ -116,7 +169,10 @@ export function DetailPageWrapper(props: Props) {
             </h3>
           </div>
           <Spin spinning={loading}>{children}</Spin>
+          <Form.Item name={['id']} noStyle></Form.Item>
         </div>
+
+        <ConfirmationModal {...confirmationModal} />
       </Form>
     </div>
   );
