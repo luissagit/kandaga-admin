@@ -36,10 +36,10 @@ export function IndexPageWrapper(props: Props) {
               href: '#',
               title: <HomeOutlined />,
             },
+            ...breadcrumbItems,
             {
               title: subModuleTitle,
             },
-            ...breadcrumbItems,
           ]}
         />
         <div className="flex gap-2 items-center">

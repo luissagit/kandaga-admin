@@ -4,7 +4,10 @@ import { userCategoryTransformer } from '../helpers';
 
 export default function FormPage() {
   return (
-    <FormPageWrapper transformer={userCategoryTransformer}>
+    <FormPageWrapper
+      transformer={userCategoryTransformer}
+      breadcrumbItems={[{ title: 'User Management' }]}
+    >
       <div className="max-w-[300px]">
         <Form.Item
           label="Code"

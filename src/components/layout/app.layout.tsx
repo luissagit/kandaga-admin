@@ -33,6 +33,7 @@ export function AppLayout(props: Props) {
   const navigate = useNavigate();
 
   const [collapsed, setCollapsed] = useState(false);
+  const [isBreakPoint, setIsBreakPoint] = useState(false);
 
   const menuItems: ItemType<MenuItemType>[] = [
     {
@@ -58,7 +59,7 @@ export function AppLayout(props: Props) {
       label: 'User Management',
       children: [
         {
-          key: '3.1',
+          key: WEB_URL.USER,
           icon: <PiUserGearBold />,
           label: 'User',
         },
@@ -101,11 +102,33 @@ export function AppLayout(props: Props) {
         collapsible
         collapsed={collapsed}
         theme="light"
+        className="h-full border-r border-primary-100"
         width={240}
+        breakpoint="lg"
+        collapsedWidth="0"
+        style={{ position: isBreakPoint ? 'absolute' : 'static', zIndex: 9 }}
+        onBreakpoint={(broken) => {
+          setCollapsed(broken);
+          setIsBreakPoint(broken);
+        }}
+        // onCollapse={(collapsed, type) => {
+        //   console.log(collapsed, type);
+        // }}
       >
         <div className="p-3">
-          <h1 className="font-bold bg-primary-200 p-3 rounded text-primary-700">
-            {collapsed ? 'LG' : 'KANDAGA'}
+          <h1 className="font-bold bg-primary-200 p-3 rounded text-primary-700 flex items-center justify-between">
+            <span>{collapsed ? 'LG' : 'KANDAGA'}</span>
+            {isBreakPoint && (
+              <Button
+                className="sm:ml-3 lg:ml-5"
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: '16px',
+                }}
+              />
+            )}
           </h1>
         </div>
         <Menu
@@ -123,7 +146,7 @@ export function AppLayout(props: Props) {
         <Header style={{ background: colorBgContainer, padding: 0 }}>
           <div className="flex gap-2 items-center h-full">
             <Button
-              className="sm:ml-3 lg:ml-5"
+              className="ml-3 sm:ml-4 lg:ml-5"
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
@@ -136,8 +159,8 @@ export function AppLayout(props: Props) {
             </h2>
           </div>
         </Header>
-        <Content className="sm:p-3 lg:p-5">
-          <div className="bg-white rounded-md h-full sm:p-3 lg:p-5 overflow-auto">
+        <Content className="p-3 sm:p-4 lg:p-5">
+          <div className="bg-white rounded-md h-full p-3 sm:p-4 lg:p-5 overflow-auto">
             {children}
           </div>
         </Content>

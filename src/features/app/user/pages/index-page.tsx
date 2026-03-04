@@ -5,9 +5,9 @@ import { PiSealCheckBold, PiXCircleBold } from 'react-icons/pi';
 export default function IndexPage() {
   const columns: ColumnsType = [
     {
-      title: 'Code',
-      key: 'code',
-      dataIndex: ['code'],
+      title: 'Username',
+      key: 'username',
+      dataIndex: ['username'],
     },
     {
       title: 'Name',
@@ -15,26 +15,24 @@ export default function IndexPage() {
       dataIndex: ['name'],
     },
     {
-      title: 'Super Admin',
-      key: 'is_super_admin',
-      dataIndex: ['is_super_admin'],
-      className: 'text-center',
-      render(value) {
-        return (
-          <div className="flex justify-center">
-            {value ? (
-              <PiSealCheckBold size={20} />
-            ) : (
-              <PiXCircleBold size={20} />
-            )}
-          </div>
-        );
-      },
+      title: 'Email',
+      key: 'email',
+      dataIndex: ['email'],
     },
     {
-      title: 'Public',
-      key: 'is_for_public',
-      dataIndex: ['is_for_public'],
+      title: 'User Category',
+      key: 'user_category.name',
+      dataIndex: ['user_category', 'name'],
+    },
+    {
+      title: 'Phone Number',
+      key: 'phone_number',
+      dataIndex: ['phone_number'],
+    },
+    {
+      title: 'Verified',
+      key: 'is_verified',
+      dataIndex: ['is_verified'],
       className: 'text-center',
       render(value) {
         return (

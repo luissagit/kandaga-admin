@@ -4,7 +4,7 @@ import { AccessRightForm } from '../components';
 
 export default function DetailPage() {
   return (
-    <DetailPageWrapper>
+    <DetailPageWrapper breadcrumbItems={[{ title: 'User Management' }]}>
       <div className="max-w-[400px]">
         <Form.Item label="Code" name={['code']}>
           <RenderText />

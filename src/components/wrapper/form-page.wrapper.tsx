@@ -24,7 +24,7 @@ export function FormPageWrapper(props: Props) {
   const children = props?.children;
   const formProps = props?.formProps;
   const transformer = props?.transformer;
-  // const breadcrumbItems = props?.breadcrumbItems ?? [];
+  const breadcrumbItems = props?.breadcrumbItems ?? [];
 
   const user = useAuthStore();
   const navigate = useNavigate();
@@ -75,6 +75,7 @@ export function FormPageWrapper(props: Props) {
       form.resetFields();
       form.setFieldsValue({
         company_id: company?.id,
+        status: 'active',
       });
     }
   }
@@ -94,12 +95,14 @@ export function FormPageWrapper(props: Props) {
           : payload;
         response = await service.create(transformedPayload);
       }
+      console.log(response);
       if (response?.data) {
         navigate(`${webUrl}/detail/${response?.data?.id}`);
       }
     } catch (error: any) {
+      console.log(error);
       notificationFailed({
-        message: error?.message,
+        message: error?.message?.error ?? error?.message,
       });
     } finally {
       setLoadingSave(false);
@@ -119,13 +122,14 @@ export function FormPageWrapper(props: Props) {
         onFinish={handleSubmit}
         {...formProps}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap gap-4">
           <Breadcrumb
             items={[
               {
                 href: '#',
                 title: <HomeOutlined />,
               },
+              ...breadcrumbItems,
               {
                 title: subModuleTitle,
                 onClick: onClickSubModule,
@@ -159,6 +163,7 @@ export function FormPageWrapper(props: Props) {
           <Spin spinning={loading || loadingSave}>
             {children}
             <Form.Item name={['company_id']} noStyle></Form.Item>
+            <Form.Item name={['status']} noStyle></Form.Item>
             <div className="absolute"></div>
           </Spin>
         </div>

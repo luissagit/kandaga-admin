@@ -9,6 +9,7 @@ const CompanyPage = React.lazy(() => import('@/features/app/company'));
 const UserCategoryPage = React.lazy(
   () => import('@/features/app/user-category'),
 );
+const UserPage = React.lazy(() => import('@/features/app/user'));
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: WEB_URL.USER_CATEGORY + '/*',
         element: <UserCategoryPage />,
+      },
+      {
+        path: WEB_URL.USER + '/*',
+        element: <UserPage />,
       },
     ],
   },

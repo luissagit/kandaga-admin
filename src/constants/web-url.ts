@@ -3,4 +3,5 @@ export const WEB_URL = {
   APP: '/app',
   COMPANY: '/app/company',
   USER_CATEGORY: '/app/user-category',
+  USER: '/app/user',
 };

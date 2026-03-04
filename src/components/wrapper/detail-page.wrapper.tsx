@@ -30,7 +30,7 @@ interface Props {
 export function DetailPageWrapper(props: Props) {
   const children = props?.children;
   const formProps = props?.formProps;
-  // const breadcrumbItems = props?.breadcrumbItems ?? [];
+  const breadcrumbItems = props?.breadcrumbItems ?? [];
 
   const navigate = useNavigate();
 
@@ -136,6 +136,7 @@ export function DetailPageWrapper(props: Props) {
                 href: '#',
                 title: <HomeOutlined />,
               },
+              ...breadcrumbItems,
               {
                 title: subModuleTitle,
                 onClick: onClickSubModule,
