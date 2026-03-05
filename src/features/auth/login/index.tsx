@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from './services';
 import { handleLogin } from '@/libs/auth';
+import { LOGO_FULL } from '@/assets';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-      <Card title="Login">
+      <Card title={<img src={LOGO_FULL} className="h-[78px]" />}>
         <Form
           form={form}
           layout="vertical"

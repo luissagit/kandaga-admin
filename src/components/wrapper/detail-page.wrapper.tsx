@@ -86,7 +86,7 @@ export function DetailPageWrapper(props: Props) {
       open: true,
       danger: true,
       title: `Delete ${subModuleTitle} Confirmation`,
-      description: `Are you sure want to delete data with code ${item?.code}`,
+      description: `Are you sure want to delete data with code/name ${item?.code ?? item?.name}`,
     });
   }
 
@@ -129,7 +129,7 @@ export function DetailPageWrapper(props: Props) {
         className="relative h-full"
         {...formProps}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap gap-4">
           <Breadcrumb
             items={[
               {

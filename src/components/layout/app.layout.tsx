@@ -1,8 +1,12 @@
-import { Button, Layout, Menu, theme } from 'antd';
+import { Avatar, Button, Divider, Layout, Menu, Popover, theme } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import { useState } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import {
   PiFileArchiveBold,
   PiFileArrowUpBold,
@@ -16,6 +20,8 @@ import type { ItemType, MenuItemType } from 'antd/es/menu/interface';
 import { WEB_URL } from '@/constants/web-url';
 import { useLocation, useNavigate } from 'react-router-dom';
 import _ from 'lodash';
+import { useAuthStore } from '@/stores';
+import { LOGO_FULL, LOGO_SQUARE } from '@/assets';
 
 interface Props {
   children: React.ReactNode;
@@ -31,6 +37,10 @@ export function AppLayout(props: Props) {
   const children = props.children;
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const auth = useAuthStore();
+
+  const user = auth?.auth;
+  const logout = auth.logout;
 
   const [collapsed, setCollapsed] = useState(false);
   const [isBreakPoint, setIsBreakPoint] = useState(false);
@@ -95,6 +105,11 @@ export function AppLayout(props: Props) {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  async function onClickLogout() {
+    logout();
+    navigate('/login');
+  }
+
   return (
     <Layout className="w-screen h-screen overflow-hidden">
       <Sider
@@ -102,11 +117,11 @@ export function AppLayout(props: Props) {
         collapsible
         collapsed={collapsed}
         theme="light"
-        className="h-full border-r border-primary-100"
+        className="h-full border-r border-primary-100 overflow-hidden"
         width={240}
         breakpoint="lg"
         collapsedWidth="0"
-        style={{ position: isBreakPoint ? 'absolute' : 'static', zIndex: 9 }}
+        style={{ position: isBreakPoint ? 'absolute' : 'relative', zIndex: 11 }}
         onBreakpoint={(broken) => {
           setCollapsed(broken);
           setIsBreakPoint(broken);
@@ -117,7 +132,11 @@ export function AppLayout(props: Props) {
       >
         <div className="p-3">
           <h1 className="font-bold bg-primary-200 p-3 rounded text-primary-700 flex items-center justify-between">
-            <span>{collapsed ? 'LG' : 'KANDAGA'}</span>
+            <img
+              src={collapsed ? LOGO_SQUARE : LOGO_FULL}
+              alt="KANDAGA"
+              className="h-[52px] w-full object-cover"
+            />
             {isBreakPoint && (
               <Button
                 className="sm:ml-3 lg:ml-5"
@@ -138,9 +157,35 @@ export function AppLayout(props: Props) {
           defaultOpenKeys={openKey ? [openKey as string] : []}
           onClick={({ key }) => {
             navigate(key);
+            if (isBreakPoint) {
+              setCollapsed(true);
+            }
           }}
           items={menuItems}
         />
+        <div className="absolute bottom-0 left-0 w-full p-1">
+          <Popover
+            title={user?.name}
+            placement="topLeft"
+            content={
+              <div>
+                <p>{user?.email}</p>
+                <Divider />
+                <Button danger onClick={onClickLogout}>
+                  Logout
+                </Button>
+              </div>
+            }
+          >
+            <Button
+              size="large"
+              className="!text-sm !border-0 hover:bg-primary-200 flex gap-2 items-center justify-start"
+              icon={<Avatar icon={<UserOutlined />} />}
+            >
+              {user?.name ?? ''}
+            </Button>
+          </Popover>
+        </div>
       </Sider>
       <Layout>
         <Header style={{ background: colorBgContainer, padding: 0 }}>

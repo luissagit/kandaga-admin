@@ -29,7 +29,7 @@ export function IndexPageWrapper(props: Props) {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-4">
         <Breadcrumb
           items={[
             {

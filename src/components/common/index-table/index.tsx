@@ -47,6 +47,7 @@ export function IndexTable(props: IndexTableProps) {
       title: 'Aksi',
       key: 'action',
       dataIndex: ['action'],
+      fixed: 'left',
       render(_, record) {
         return (
           <RowAction
@@ -131,7 +132,7 @@ export function IndexTable(props: IndexTableProps) {
       open: true,
       danger: true,
       title: `Delete ${subModuleTitle} Confirmation`,
-      description: `Are you sure want to delete data with code ${item?.code}`,
+      description: `Are you sure want to delete data with code/name ${item?.code ?? item?.name}`,
     });
   }
 
