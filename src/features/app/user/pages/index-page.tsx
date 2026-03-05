@@ -1,6 +1,8 @@
 import { IndexPageWrapper, IndexTable } from '@/components';
 import type { ColumnsType } from 'antd/es/table';
 import { PiSealCheckBold, PiXCircleBold } from 'react-icons/pi';
+import { Filter } from '../components';
+import { userTransformer } from '../helpers';
 
 export default function IndexPage() {
   const columns: ColumnsType = [
@@ -49,8 +51,16 @@ export default function IndexPage() {
   ];
 
   return (
-    <IndexPageWrapper breadcrumbItems={[{ title: 'User Management' }]}>
+    <IndexPageWrapper
+      breadcrumbItems={[{ title: 'User Management' }]}
+      filterProps={{
+        filterComponent: <Filter />,
+      }}
+    >
       <IndexTable
+        filterProps={{
+          transformFilter: userTransformer.filter,
+        }}
         columns={columns}
         rowActionProps={{
           showDelete(item) {

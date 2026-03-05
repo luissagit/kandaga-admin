@@ -5,12 +5,12 @@ import {
   UploadImage,
 } from '@/components';
 import { Form, Input } from 'antd';
-import { documentCategoryTransformer, FileType } from '../helpers';
+import { documentTransformer, FileType } from '../helpers';
 import { API_URL, MODULE, SUB_MODULE } from '@/constants';
 
 export default function FormPage() {
   return (
-    <FormPageWrapper transformer={documentCategoryTransformer}>
+    <FormPageWrapper transformer={documentTransformer}>
       <div className="max-w-[300px]">
         <Form.Item shouldUpdate noStyle>
           {({ getFieldsValue, setFieldsValue }) => {

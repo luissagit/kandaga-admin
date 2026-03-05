@@ -1,5 +1,7 @@
 import { IndexPageWrapper, IndexTable } from '@/components';
 import type { ColumnsType } from 'antd/es/table';
+import { Filter } from '../components';
+import { documentTransformer } from '../helpers';
 
 export default function IndexPage() {
   const columns: ColumnsType = [
@@ -21,8 +23,11 @@ export default function IndexPage() {
   ];
 
   return (
-    <IndexPageWrapper>
-      <IndexTable columns={columns} />
+    <IndexPageWrapper filterProps={{ filterComponent: <Filter /> }}>
+      <IndexTable
+        columns={columns}
+        filterProps={{ transformFilter: documentTransformer.filter }}
+      />
     </IndexPageWrapper>
   );
 }

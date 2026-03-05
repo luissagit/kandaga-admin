@@ -1,6 +1,7 @@
 import { IndexPageWrapper, IndexTable } from '@/components';
 import { Image } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { Filter } from '../components';
 
 export default function IndexPage() {
   const columns: ColumnsType = [
@@ -41,7 +42,10 @@ export default function IndexPage() {
   ];
 
   return (
-    <IndexPageWrapper breadcrumbItems={[{ title: 'Master Data' }]}>
+    <IndexPageWrapper
+      breadcrumbItems={[{ title: 'Master Data' }]}
+      filterProps={{ filterComponent: <Filter /> }}
+    >
       <IndexTable columns={columns} />
     </IndexPageWrapper>
   );

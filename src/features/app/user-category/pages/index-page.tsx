@@ -54,7 +54,9 @@ export default function IndexPage() {
   return (
     <IndexPageWrapper
       breadcrumbItems={[{ title: 'User Management' }]}
-      filterComponent={<Filter />}
+      filterProps={{
+        filterComponent: <Filter />,
+      }}
     >
       <IndexTable
         columns={columns}

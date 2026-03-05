@@ -3,6 +3,7 @@ import {
   renderStatus,
   RowAction,
   type ConfirmationModalProps,
+  type FilterProps,
   type RowActionProps,
 } from '@/components';
 import { useModuleContext } from '@/context/base-module.context';
@@ -15,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 export interface IndexTableProps extends TableProps {
   key?: string;
   rowActionProps?: RowActionProps;
+  filterProps?: FilterProps;
 }
 
 export function IndexTable(props: IndexTableProps) {
@@ -32,7 +34,10 @@ export function IndexTable(props: IndexTableProps) {
   const filterDataIndex = module.filterDataIndex;
 
   const columns = props.columns ?? [];
+  const filterProps = props?.filterProps;
   const rowActionProps = props?.rowActionProps ?? {};
+
+  const transformFilter = filterProps?.transformFilter;
 
   const [loading, setLoading] = useState(false);
   const [confirmationModal, setConfirmationModal] =
@@ -98,10 +103,13 @@ export function IndexTable(props: IndexTableProps) {
   async function getData(params?: any) {
     try {
       setLoading(true);
+      const filter = transformFilter
+        ? transformFilter(filterDataIndex)
+        : filterDataIndex;
       const { data, paging } = await service.getIndex({
         page: params?.current ?? pagination?.current,
         size: params?.pageSize ?? pagination?.pageSize,
-        ...(filterDataIndex ?? {}),
+        ...(filter ?? {}),
       });
       if (data) {
         setDataIndex(data);

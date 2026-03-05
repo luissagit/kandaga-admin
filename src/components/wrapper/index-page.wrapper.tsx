@@ -10,16 +10,23 @@ import { useNavigate } from 'react-router-dom';
 import { DrawerFilter } from '../common';
 import { useState } from 'react';
 
-interface Props {
-  children: React.ReactNode;
-  breadcrumbItems?: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[];
+export interface FilterProps {
   filterComponent?: React.ReactNode;
+  transformFilter?(payload: any): any;
 }
 
-export function IndexPageWrapper(props: Props) {
+export interface IndexPageWrapperProps {
+  children: React.ReactNode;
+  breadcrumbItems?: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[];
+  filterProps?: FilterProps;
+}
+
+export function IndexPageWrapper(props: IndexPageWrapperProps) {
   const children = props?.children;
-  const filterComponent = props?.filterComponent;
+  const filterProps = props?.filterProps;
   const breadcrumbItems = props?.breadcrumbItems ?? [];
+
+  const filterComponent = filterProps?.filterComponent;
 
   const navigate = useNavigate();
   const module = useModuleContext();
