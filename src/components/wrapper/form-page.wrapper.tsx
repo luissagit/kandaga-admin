@@ -95,12 +95,10 @@ export function FormPageWrapper(props: Props) {
           : payload;
         response = await service.create(transformedPayload);
       }
-      console.log(response);
       if (response?.data) {
         navigate(`${webUrl}/detail/${response?.data?.id}`);
       }
     } catch (error: any) {
-      console.log(error);
       notificationFailed({
         message: error?.message?.error ?? error?.message,
       });

@@ -76,7 +76,7 @@ export function IndexTable(props: IndexTableProps) {
     columns: parsedColumns,
     loading: loading,
     dataSource: dataIndex,
-    scroll: { x: 'max-content' },
+    scroll: { x: 'max-content', y: 'calc(100vh - 340px)' },
     pagination: {
       showSizeChanger: true,
       current: pagination?.current,

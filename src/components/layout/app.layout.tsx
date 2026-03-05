@@ -57,7 +57,7 @@ export function AppLayout(props: Props) {
       label: 'Master Data',
       children: [
         {
-          key: '2.1',
+          key: WEB_URL.DOCUMENT_CATEGORY,
           icon: <PiFileMagnifyingGlassBold />,
           label: 'Document Category',
         },
