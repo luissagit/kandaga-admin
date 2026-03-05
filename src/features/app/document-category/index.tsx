@@ -15,6 +15,7 @@ export default function UserCategory() {
       config={{
         service: documentCategoryService,
         webUrl: WEB_URL.DOCUMENT_CATEGORY,
+        module: MODULE.MASTER_DATA,
         subModuleTitle: 'Document Category',
         subModule: SUB_MODULE[MODULE.MASTER_DATA][
           'DOCUMENT_CATEGORY'

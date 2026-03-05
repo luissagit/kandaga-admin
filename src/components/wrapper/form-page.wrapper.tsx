@@ -34,13 +34,14 @@ export function FormPageWrapper(props: Props) {
 
   const { id } = useParams();
   const { pathname } = useLocation();
-  const { config, form } = useModuleContext();
+  const { config, form, accessRight } = useModuleContext();
 
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
 
   const isUpdate = !_.isNil(id) || pathname.includes('update');
   const formTitle = isUpdate ? 'Update Data' : 'Create New Data';
+  const accessSave = isUpdate ? accessRight?.update : accessRight?.create;
 
   const service = config?.service as BaseService<any>;
   const webUrl = config?.webUrl;
@@ -140,14 +141,16 @@ export function FormPageWrapper(props: Props) {
             ]}
           />
           <div className="flex gap-2 items-center">
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={loadingSave}
-              icon={<PiFloppyDiskBold />}
-            >
-              Simpan
-            </Button>
+            {accessSave && (
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loadingSave}
+                icon={<PiFloppyDiskBold />}
+              >
+                Simpan
+              </Button>
+            )}
             <Button icon={<PiArrowCircleLeftBold />} onClick={onClickBack}>
               Kembali
             </Button>

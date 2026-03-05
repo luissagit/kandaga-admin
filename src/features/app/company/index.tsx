@@ -16,6 +16,7 @@ export default function Company() {
         service: companyService,
         webUrl: WEB_URL.COMPANY,
         subModuleTitle: 'Configuration',
+        module: MODULE.CONFIGURATION,
         subModule: SUB_MODULE[MODULE.CONFIGURATION]['COMPANY'] as string,
       }}
     >

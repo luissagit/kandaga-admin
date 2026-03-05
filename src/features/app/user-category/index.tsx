@@ -15,6 +15,7 @@ export default function UserCategory() {
       config={{
         service: userCategoryService,
         webUrl: WEB_URL.USER_CATEGORY,
+        module: MODULE.USER_MANAGEMENT,
         subModuleTitle: 'User Category',
         subModule: SUB_MODULE[MODULE.CONFIGURATION]['USER_CATEGORY'] as string,
       }}

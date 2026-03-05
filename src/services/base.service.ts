@@ -1,5 +1,5 @@
 import type { GetIndexResponse } from '@/types';
-import axios from 'axios';
+import axios, { type AxiosRequestConfig } from 'axios';
 
 export class BaseService<T> {
   protected endpoint: string;
@@ -13,8 +13,8 @@ export class BaseService<T> {
     return data;
   }
 
-  async getDetail(id: string | number) {
-    const { data } = await axios.get(`${this.endpoint}/${id}`);
+  async getDetail(id: string | number, config?: AxiosRequestConfig<any>) {
+    const { data } = await axios.get(`${this.endpoint}/${id}`, config);
     return data;
   }
 

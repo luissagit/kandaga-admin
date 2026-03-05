@@ -20,6 +20,7 @@ import {
 } from 'react-icons/pi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ConfirmationModal, type ConfirmationModalProps } from '../common';
+import type { BaseService } from '@/services/base.service';
 
 interface Props {
   children: React.ReactNode;
@@ -35,7 +36,7 @@ export function DetailPageWrapper(props: Props) {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const { config, formDetail } = useModuleContext();
+  const { config, formDetail, accessRight } = useModuleContext();
 
   const [loading, setLoading] = useState(false);
   const [confirmationModal, setConfirmationModal] =
@@ -48,7 +49,7 @@ export function DetailPageWrapper(props: Props) {
     });
 
   const formTitle = 'Detail';
-  const service = config?.service;
+  const service = config?.service as BaseService<any>;
   const webUrl = config?.webUrl;
   const subModuleTitle = config?.subModuleTitle;
 
@@ -148,16 +149,20 @@ export function DetailPageWrapper(props: Props) {
             ]}
           />
           <div className="flex gap-2 items-center">
-            <Button
-              type="primary"
-              icon={<PiNotePencilBold />}
-              onClick={onClickUpdate}
-            >
-              Update
-            </Button>
-            <Button danger icon={<PiTrashBold />} onClick={onClickDelete}>
-              Delete
-            </Button>
+            {accessRight?.update && (
+              <Button
+                type="primary"
+                icon={<PiNotePencilBold />}
+                onClick={onClickUpdate}
+              >
+                Update
+              </Button>
+            )}
+            {accessRight?.delete && (
+              <Button danger icon={<PiTrashBold />} onClick={onClickDelete}>
+                Delete
+              </Button>
+            )}
             <Button icon={<PiArrowCircleLeftBold />} onClick={onClickBack}>
               Kembali
             </Button>

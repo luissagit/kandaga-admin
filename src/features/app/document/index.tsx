@@ -15,6 +15,7 @@ export default function UserCategory() {
       config={{
         service: documentService,
         webUrl: WEB_URL.DOCUMENT,
+        module: MODULE.TRANSACTION,
         subModuleTitle: 'Transaction',
         subModule: SUB_MODULE[MODULE.TRANSACTION]['DOCUMENT'] as string,
       }}

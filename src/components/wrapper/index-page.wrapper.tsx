@@ -30,6 +30,7 @@ export function IndexPageWrapper(props: IndexPageWrapperProps) {
 
   const navigate = useNavigate();
   const module = useModuleContext();
+  const accessRight = module.accessRight;
 
   const setFilterDataIndex = module.setFilterDataIndex;
 
@@ -77,9 +78,15 @@ export function IndexPageWrapper(props: IndexPageWrapperProps) {
           <Button onClick={onClickFilter} icon={<PiFunnelBold />}>
             Filter
           </Button>
-          <Button type="primary" onClick={onClickCreate} icon={<PiPlusBold />}>
-            Create
-          </Button>
+          {accessRight?.create && (
+            <Button
+              type="primary"
+              onClick={onClickCreate}
+              icon={<PiPlusBold />}
+            >
+              Create
+            </Button>
+          )}
         </div>
       </div>
       <div className="py-5">{children}</div>

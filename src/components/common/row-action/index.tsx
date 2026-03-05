@@ -1,3 +1,4 @@
+import { useModuleContext } from '@/context/base-module.context';
 import { Button, Tooltip } from 'antd';
 import { PiEyeBold, PiNotePencilBold, PiTrashBold } from 'react-icons/pi';
 
@@ -14,6 +15,9 @@ export interface RowActionProps {
 }
 
 export function RowAction(props: RowActionProps): React.ReactNode {
+  const module = useModuleContext();
+  const accessRight = module.accessRight;
+
   const item = props?.item;
   const showUpdate = props?.showUpdate;
   const showDelete = props?.showDelete;
@@ -46,7 +50,7 @@ export function RowAction(props: RowActionProps): React.ReactNode {
 
   return (
     <div className="flex gap-2 items-center">
-      {isShowDetail && (
+      {isShowDetail && accessRight?.read && (
         <Tooltip title="Detail">
           <Button
             color="lime"
@@ -56,7 +60,7 @@ export function RowAction(props: RowActionProps): React.ReactNode {
           />
         </Tooltip>
       )}
-      {isShowUpdate && (
+      {isShowUpdate && accessRight?.update && (
         <Tooltip title="Update">
           <Button
             color="blue"
@@ -66,7 +70,7 @@ export function RowAction(props: RowActionProps): React.ReactNode {
           />
         </Tooltip>
       )}
-      {isShowDelete && (
+      {isShowDelete && accessRight?.delete && (
         <Tooltip title="Detele">
           <Button danger icon={<PiTrashBold />} onClick={onClickDelete} />
         </Tooltip>

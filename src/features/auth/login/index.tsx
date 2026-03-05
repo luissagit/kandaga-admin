@@ -1,13 +1,16 @@
 import { AuthLayout } from '@/components/layout';
 import { Button, Card, Form, Input, notification } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from './services';
 import { handleLogin } from '@/libs/auth';
 import { LOGO_FULL } from '@/assets';
+import { useAuthStore } from '@/stores';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const authStore = useAuthStore();
+  const token = authStore?.auth?.token;
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -16,7 +19,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const { data } = await authService.login(payload);
-      handleLogin(data);
+      await handleLogin(data);
       navigate('/app');
     } catch (error: any) {
       notification.error({
@@ -26,6 +29,16 @@ export default function LoginPage() {
       setLoading(false);
     }
   }
+
+  function checkToken(token: string) {
+    if (token) {
+      navigate('/app');
+    }
+  }
+
+  useEffect(() => {
+    checkToken(token);
+  }, [token]);
 
   return (
     <AuthLayout>

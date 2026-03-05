@@ -1,14 +1,22 @@
-import { usePaginationStore } from '@/stores';
+import { useAuthStore, usePaginationStore } from '@/stores';
 import { useFilterStore } from '@/stores/filter-store';
 import type { Pagination } from '@/types';
 import { Form, type FormInstance } from 'antd';
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react';
 
 // --- INTERFACES ---
 
 interface ProviderConfig<S> {
   service: S;
   webUrl: string;
+  module: string;
   subModule: string;
   subModuleTitle: string;
 }
@@ -31,6 +39,8 @@ interface BaseContextType<T, S> {
 
   form: FormInstance<any>;
   formDetail: FormInstance<any>;
+
+  accessRight: any;
 
   config: ProviderConfig<S>;
 }
@@ -68,6 +78,11 @@ export function createModuleContext<T, S>() {
     children: ReactNode;
     config: ProviderConfig<S>;
   }) => {
+    const authStore = useAuthStore();
+    const auth = authStore.auth;
+    const accessRights = auth?.access_rights;
+
+    const module = config.module;
     const moduleKey = config.subModule;
 
     const { moduleFilter, setModuleFilter } = useFilterStore();
@@ -76,6 +91,7 @@ export function createModuleContext<T, S>() {
     const [dataIndex, setDataIndex] = useState<T[]>([]);
     const [selectedDataIndex, setSelectedDataIndex] = useState<T[]>([]);
     const [dataDetail, setDataDetail] = useState<T>({} as T);
+    const [accessRight, setAccessRight] = useState<T>({} as T);
 
     const [pagination, setPaginationState] = useState<Pagination>(
       modulePagination[moduleKey] || {
@@ -101,6 +117,27 @@ export function createModuleContext<T, S>() {
       setModuleFilter(moduleKey, filter);
     };
 
+    const generateAccessRight = useCallback(
+      (accessRights: any[]) => {
+        const found = accessRights?.find(
+          (item: any) => item?.module === module,
+        );
+
+        const timeoutId = setTimeout(() => {
+          setAccessRight(found || {});
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
+      },
+      [module],
+    );
+
+    useEffect(() => {
+      if (accessRights) {
+        generateAccessRight(accessRights);
+      }
+    }, [accessRights, generateAccessRight]);
+
     const value: BaseContextType<T, S> = {
       dataIndex,
       setDataIndex,
@@ -115,6 +152,7 @@ export function createModuleContext<T, S>() {
       form,
       formDetail,
       config,
+      accessRight,
     };
 
     return (
