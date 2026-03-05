@@ -1,3 +1,5 @@
+import { usePaginationStore } from '@/stores';
+import { useFilterStore } from '@/stores/filter-store';
 import type { Pagination } from '@/types';
 import { Form, type FormInstance } from 'antd';
 import { createContext, useContext, useState, type ReactNode } from 'react';
@@ -43,7 +45,7 @@ const ModuleContextShared = createContext<
  * Hook ini digunakan untuk komponen generic (seperti IndexPageWrapper / FormWrapper)
  * agar tidak perlu import dari folder fitur (company/user/dll)
  */
-export const useModuleContext = <T = any, S = any>() => {
+export const useModuleContext = <T, S>() => {
   const context = useContext(ModuleContextShared);
   if (!context) {
     throw new Error(
@@ -66,18 +68,38 @@ export function createModuleContext<T, S>() {
     children: ReactNode;
     config: ProviderConfig<S>;
   }) => {
+    const moduleKey = config.subModule;
+
+    const { moduleFilter, setModuleFilter } = useFilterStore();
+    const { modulePagination, setModulePagination } = usePaginationStore();
+
     const [dataIndex, setDataIndex] = useState<T[]>([]);
-    const [pagination, setPagination] = useState<Pagination>({
-      current: 1,
-      pageSize: 10,
-      total: 0,
-    });
-    const [filterDataIndex, setFilterDataIndex] = useState<any>(null);
     const [selectedDataIndex, setSelectedDataIndex] = useState<T[]>([]);
     const [dataDetail, setDataDetail] = useState<T>({} as T);
 
+    const [pagination, setPaginationState] = useState<Pagination>(
+      modulePagination[moduleKey] || {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+    );
+    const [filterDataIndex, setFilterDataIndexState] = useState<any>(
+      moduleFilter[moduleKey] || null,
+    );
+
     const [form] = Form.useForm();
     const [formDetail] = Form.useForm();
+
+    const setPagination = (newPagination: Pagination) => {
+      setPaginationState(newPagination);
+      setModulePagination(moduleKey, newPagination);
+    };
+
+    const setFilterDataIndex = (filter: any) => {
+      setFilterDataIndexState(filter);
+      setModuleFilter(moduleKey, filter);
+    };
 
     const value: BaseContextType<T, S> = {
       dataIndex,

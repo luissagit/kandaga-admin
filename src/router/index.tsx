@@ -13,6 +13,7 @@ const UserPage = React.lazy(() => import('@/features/app/user'));
 const DocumentCategoryPage = React.lazy(
   () => import('@/features/app/document-category'),
 );
+const DocumentPage = React.lazy(() => import('@/features/app/document'));
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: WEB_URL.DOCUMENT_CATEGORY + '/*',
         element: <DocumentCategoryPage />,
+      },
+      {
+        path: WEB_URL.DOCUMENT + '/*',
+        element: <DocumentPage />,
       },
     ],
   },

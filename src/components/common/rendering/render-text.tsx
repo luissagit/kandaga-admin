@@ -12,7 +12,7 @@ export function RenderText(props: RenderTextProps): React.ReactNode {
   const text = customRender ? customRender(value) : value;
 
   return (
-    <div className={`border rounded-md p-2 border-primary-300 ${className}`}>
+    <div className={`border-b px-0 border-primary-300 ${className}`}>
       {text}
     </div>
   );

@@ -8,6 +8,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import {
+  PiArrowCounterClockwiseBold,
   PiFileArchiveBold,
   PiFileArrowUpBold,
   PiFileMagnifyingGlassBold,
@@ -44,10 +45,11 @@ export function AppLayout(props: Props) {
 
   const [collapsed, setCollapsed] = useState(false);
   const [isBreakPoint, setIsBreakPoint] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const menuItems: ItemType<MenuItemType>[] = [
     {
-      key: '',
+      key: WEB_URL.DOCUMENT,
       icon: <PiFileArrowUpBold />,
       label: 'Transaction',
     },
@@ -108,6 +110,10 @@ export function AppLayout(props: Props) {
   async function onClickLogout() {
     logout();
     navigate('/login');
+  }
+
+  function onClickRefresh() {
+    setRefreshKey((prev) => prev + 1);
   }
 
   return (
@@ -189,23 +195,31 @@ export function AppLayout(props: Props) {
       </Sider>
       <Layout>
         <Header style={{ background: colorBgContainer, padding: 0 }}>
-          <div className="flex gap-2 items-center h-full">
+          <div className="flex justify-between items-center h-full px-3 sm:px-4 lg:px-5">
+            <div className="flex gap-2 items-center h-full">
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: '16px',
+                }}
+              />
+              <h2 className="font-semibold text-base">
+                {selectedMenu?.label ?? ''}
+              </h2>
+            </div>
             <Button
-              className="ml-3 sm:ml-4 lg:ml-5"
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-              }}
+              onClick={onClickRefresh}
+              icon={<PiArrowCounterClockwiseBold />}
             />
-            <h2 className="font-semibold text-base">
-              {selectedMenu?.label ?? ''}
-            </h2>
           </div>
         </Header>
         <Content className="p-3 sm:p-4 lg:p-5">
-          <div className="bg-white rounded-md h-full p-3 sm:p-4 lg:p-5 overflow-auto">
+          <div
+            key={refreshKey}
+            className="bg-white rounded-md h-full p-3 sm:p-4 lg:p-5 overflow-auto"
+          >
             {children}
           </div>
         </Content>

@@ -6,6 +6,7 @@ import {
   type RowActionProps,
 } from '@/components';
 import { useModuleContext } from '@/context/base-module.context';
+import type { BaseService } from '@/services/base.service';
 import { notification, Table, type TableProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
@@ -20,14 +21,15 @@ export function IndexTable(props: IndexTableProps) {
   const navigate = useNavigate();
   const module = useModuleContext();
 
-  const service = module.config.service;
+  const service = module.config.service as BaseService<any>;
   const webUrl = module.config.webUrl;
   const subModuleTitle = module.config.subModuleTitle;
 
-  const dataIndex = module.dataIndex;
+  const dataIndex = module.dataIndex as any[];
   const setDataIndex = module.setDataIndex;
   const pagination = module.pagination;
   const setPagination = module.setPagination;
+  const filterDataIndex = module.filterDataIndex;
 
   const columns = props.columns ?? [];
   const rowActionProps = props?.rowActionProps ?? {};
@@ -99,6 +101,7 @@ export function IndexTable(props: IndexTableProps) {
       const { data, paging } = await service.getIndex({
         page: params?.current ?? pagination?.current,
         size: params?.pageSize ?? pagination?.pageSize,
+        ...(filterDataIndex ?? {}),
       });
       if (data) {
         setDataIndex(data);
@@ -163,7 +166,7 @@ export function IndexTable(props: IndexTableProps) {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [filterDataIndex]);
 
   return (
     <div>

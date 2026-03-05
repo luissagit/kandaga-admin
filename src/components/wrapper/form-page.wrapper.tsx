@@ -12,6 +12,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { notificationFailed } from '../common';
 import { useAuthStore } from '@/stores';
 import type { Transformer } from '@/types';
+import type { BaseService } from '@/services/base.service';
 
 interface Props {
   children: React.ReactNode;
@@ -41,7 +42,7 @@ export function FormPageWrapper(props: Props) {
   const isUpdate = !_.isNil(id) || pathname.includes('update');
   const formTitle = isUpdate ? 'Update Data' : 'Create New Data';
 
-  const service = config?.service;
+  const service = config?.service as BaseService<any>;
   const webUrl = config?.webUrl;
   const subModuleTitle = config?.subModuleTitle;
 

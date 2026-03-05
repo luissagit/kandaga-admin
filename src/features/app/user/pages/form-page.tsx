@@ -2,8 +2,14 @@ import { FormPageWrapper, SelectPaginate } from '@/components';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { userTransformer } from '../helpers';
 import { API_URL, MODULE, SUB_MODULE } from '@/constants';
+import { useLocation, useParams } from 'react-router-dom';
+import _ from 'lodash';
 
 export default function FormPage() {
+  const { id } = useParams();
+  const { pathname } = useLocation();
+  const isUpdate = !_.isNil(id) || pathname.includes('update');
+
   return (
     <FormPageWrapper
       transformer={userTransformer}
@@ -15,7 +21,6 @@ export default function FormPage() {
             <Form.Item
               label="Username"
               name={['username']}
-              required
               rules={[{ required: true }]}
             >
               <Input />
@@ -25,7 +30,6 @@ export default function FormPage() {
             <Form.Item
               label="Name"
               name={['name']}
-              required
               rules={[{ required: true }]}
             >
               <Input />
@@ -35,8 +39,7 @@ export default function FormPage() {
             <Form.Item
               label="Password"
               name={['password']}
-              required
-              rules={[{ required: true }]}
+              rules={[{ required: isUpdate ? false : true }]}
             >
               <Input.Password />
             </Form.Item>
@@ -45,7 +48,6 @@ export default function FormPage() {
             <Form.Item
               label="Email"
               name={['email']}
-              required
               rules={[{ required: true }, { type: 'email' }]}
             >
               <Input />
@@ -55,7 +57,6 @@ export default function FormPage() {
             <Form.Item
               label="Phone Number"
               name={['phone_number']}
-              required
               rules={[
                 { required: true },
                 {
@@ -71,7 +72,6 @@ export default function FormPage() {
             <Form.Item
               label="User Category"
               name={['user_category']}
-              required
               rules={[{ required: true }]}
             >
               <SelectPaginate
