@@ -23,7 +23,7 @@ axios.interceptors.response.use(
     if (error.response?.status === 401) {
       const currentPath = window.location.pathname;
       if (currentPath.startsWith('/app')) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('auth');
         window.location.href = '/login';
       }
     }
