@@ -1,7 +1,7 @@
 import { createModuleContext } from '@/context/base-module.context';
-import type { DocumentCategory, DocumentCategoryService } from './service';
+import type { Document, DocumentService } from './service';
 
 export const [ModuleProvider, useModuleContext] = createModuleContext<
-  DocumentCategory,
-  DocumentCategoryService
+  Document,
+  DocumentService
 >();
