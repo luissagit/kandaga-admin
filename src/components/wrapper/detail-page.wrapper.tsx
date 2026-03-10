@@ -26,12 +26,22 @@ interface Props {
   children: React.ReactNode;
   breadcrumbItems?: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[];
   formProps?: FormProps;
+
+  handleClickBack?(): any;
+  handleAfterDelete?(): any;
+
+  showUpdate?: boolean;
 }
 
 export function DetailPageWrapper(props: Props) {
   const children = props?.children;
   const formProps = props?.formProps;
   const breadcrumbItems = props?.breadcrumbItems ?? [];
+
+  const handleClickBack = props?.handleClickBack;
+  const handleAfterDelete = props?.handleAfterDelete;
+
+  const showUpdate = props?.showUpdate ?? true;
 
   const navigate = useNavigate();
 
@@ -58,7 +68,11 @@ export function DetailPageWrapper(props: Props) {
   }
 
   function onClickBack() {
-    navigate(webUrl);
+    if (handleClickBack) {
+      handleClickBack();
+    } else {
+      navigate(webUrl);
+    }
   }
 
   function onClickUpdate() {
@@ -107,7 +121,11 @@ export function DetailPageWrapper(props: Props) {
       const { data } = await service.delete(item?.id);
       if (data) {
         handleCancelModalAction();
-        navigate(webUrl);
+        if (handleAfterDelete) {
+          handleAfterDelete();
+        } else {
+          navigate(webUrl);
+        }
       }
     } catch (error: any) {
       notification.error({
@@ -149,7 +167,7 @@ export function DetailPageWrapper(props: Props) {
             ]}
           />
           <div className="flex gap-2 items-center">
-            {accessRight?.update && (
+            {accessRight?.update && showUpdate && (
               <Button
                 type="primary"
                 icon={<PiNotePencilBold />}

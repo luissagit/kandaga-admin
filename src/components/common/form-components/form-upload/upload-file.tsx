@@ -23,8 +23,13 @@ export function UploadFile(props: UploadFileProps): React.ReactNode {
 
   function beforeUpload(file: FileType) {
     const isLt2M = file.size / 1024 / 1024 < 2;
+    const isPDF = file.type === 'application/pdf';
+    if (!isPDF) {
+      message.error('Kamu hanya bisa mengunggah file PDF!');
+      return Upload.LIST_IGNORE; // Mengabaikan file jika bukan PDF
+    }
     if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
+      message.error('Document must smaller than 2MB!');
     }
     if (onChange) {
       getBase64(file, (url) => {
@@ -61,6 +66,7 @@ export function UploadFile(props: UploadFileProps): React.ReactNode {
         fileList={fileList}
         beforeUpload={beforeUpload}
         onRemove={onRemove}
+        accept=".pdf,application/pdf"
       >
         <Button icon={<UploadOutlined />}>Select File</Button>
       </Upload>

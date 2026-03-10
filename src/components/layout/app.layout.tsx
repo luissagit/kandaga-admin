@@ -42,12 +42,18 @@ export function AppLayout(props: Props) {
 
   const user = auth?.auth;
   const logout = auth.logout;
+  const isSuperAdmin = user?.user_category?.is_super_admin;
 
   const [collapsed, setCollapsed] = useState(false);
   const [isBreakPoint, setIsBreakPoint] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const menuItems: ItemType<MenuItemType>[] = [
+    {
+      key: WEB_URL.DOCUMENT_USER,
+      icon: <PiFileArrowUpBold />,
+      label: 'Document',
+    },
     {
       key: WEB_URL.DOCUMENT,
       icon: <PiFileArrowUpBold />,
@@ -88,6 +94,11 @@ export function AppLayout(props: Props) {
       label: 'Configuration',
     },
   ];
+
+  const fixedMenuItems = menuItems?.filter((item) => {
+    if (isSuperAdmin) return true;
+    return item?.key === WEB_URL.DOCUMENT_USER;
+  });
 
   const allFlatMenus = flattenMenuItems(menuItems);
   const selectedMenu = _.chain(allFlatMenus)
@@ -167,7 +178,7 @@ export function AppLayout(props: Props) {
               setCollapsed(true);
             }
           }}
-          items={menuItems}
+          items={fixedMenuItems}
         />
         <div className="absolute bottom-0 left-0 w-full p-1">
           <Popover

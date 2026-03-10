@@ -22,6 +22,33 @@ class AuthService extends BaseService<Auth> {
     });
     return data;
   }
+
+  async register(payload?: any) {
+    const { data } = await axios.request({
+      url: this.endpoint + '/register',
+      method: 'post',
+      data: payload,
+    });
+    return data;
+  }
+
+  async verifyEmail(payload?: any) {
+    const { data } = await axios.request({
+      url: this.endpoint + '/verify',
+      method: 'post',
+      data: payload,
+    });
+    return data;
+  }
+
+  async resendEmail(payload?: any) {
+    const { data } = await axios.request({
+      url: this.endpoint + '/resend-otp',
+      method: 'post',
+      data: payload,
+    });
+    return data;
+  }
 }
 
 export const authService = new AuthService();

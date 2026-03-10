@@ -20,7 +20,15 @@ export default function LoginPage() {
       setLoading(true);
       const { data } = await authService.login(payload);
       await handleLogin(data);
-      navigate('/app');
+      if (data?.is_verified === false) {
+        navigate('/verify-email');
+      } else {
+        if (data?.is_super_admin) {
+          navigate('/app');
+        } else {
+          navigate('/app/document-user');
+        }
+      }
     } catch (error: any) {
       notification.error({
         title: error?.data?.errors,
@@ -63,10 +71,14 @@ export default function LoginPage() {
           >
             <Input.Password />
           </Form.Item>
-          <div className="mt-[48px]">
+          <div className="mt-[32px]">
             <Button htmlType="submit" loading={loading} type="primary">
               Login
             </Button>
+
+            <p className="mt-2">
+              Belum punya akun? <Link to={'/register'}>Daftar Disini</Link>
+            </p>
           </div>
         </Form>
       </Card>

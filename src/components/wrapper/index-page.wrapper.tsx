@@ -19,12 +19,18 @@ export interface IndexPageWrapperProps {
   children: React.ReactNode;
   breadcrumbItems?: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[];
   filterProps?: FilterProps;
+
+  showCreate?: boolean;
+  showFilter?: boolean;
 }
 
 export function IndexPageWrapper(props: IndexPageWrapperProps) {
   const children = props?.children;
   const filterProps = props?.filterProps;
   const breadcrumbItems = props?.breadcrumbItems ?? [];
+
+  const showCreate = props?.showCreate ?? true;
+  const showFilter = props?.showFilter ?? true;
 
   const filterComponent = filterProps?.filterComponent;
 
@@ -75,10 +81,12 @@ export function IndexPageWrapper(props: IndexPageWrapperProps) {
           ]}
         />
         <div className="flex gap-2 items-center">
-          <Button onClick={onClickFilter} icon={<PiFunnelBold />}>
-            Filter
-          </Button>
-          {accessRight?.create && (
+          {showFilter && (
+            <Button onClick={onClickFilter} icon={<PiFunnelBold />}>
+              Filter
+            </Button>
+          )}
+          {accessRight?.create && showCreate && (
             <Button
               type="primary"
               onClick={onClickCreate}
