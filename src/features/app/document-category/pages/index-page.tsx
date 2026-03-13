@@ -8,7 +8,7 @@ export default function IndexPage() {
       title: 'Icon',
       key: 'icon_url',
       dataIndex: ['icon_url'],
-      render(value, record) {
+      render(_, record) {
         return (
           <RenderImage
             value={record.id}
