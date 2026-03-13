@@ -1,4 +1,4 @@
-import { notificationFailed } from '@/components';
+import { notificationFailed, RenderImage } from '@/components';
 import { Button, List, Popconfirm, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -158,8 +158,9 @@ export default function FormPage() {
             >
               <List.Item.Meta
                 avatar={
-                  <img
-                    src={item?.document_category?.icon_url}
+                  <RenderImage
+                    service={documentCategoryService}
+                    value={item?.document_category?.id}
                     className="w-[48px]"
                   />
                 }

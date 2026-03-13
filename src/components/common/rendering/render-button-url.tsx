@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 import type React from 'react';
 import { PiArrowSquareOutBold } from 'react-icons/pi';
+import { useParams } from 'react-router-dom';
 
 export interface RenderButtonUrlProps {
   value?: string;
@@ -8,7 +9,10 @@ export interface RenderButtonUrlProps {
 }
 
 export function RenderButtonUrl(props: RenderButtonUrlProps): React.ReactNode {
-  const value = props?.value;
+  const params = useParams();
+  const id = params?.id;
+
+  const value = id ?? props?.value;
   const label = props?.label ?? 'Open Document';
 
   function onClickDocument() {

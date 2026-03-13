@@ -1,14 +1,14 @@
 import {
   DetailPageWrapper,
-  RenderButtonUrl,
   RenderImage,
+  RenderPdf,
   RenderText,
 } from '@/components';
 import { Col, Form, Row } from 'antd';
 
 export default function DetailPage() {
   return (
-    <DetailPageWrapper>
+    <DetailPageWrapper showUpdate={false}>
       <div className="max-w-[600px]">
         <Row gutter={[18, 8]}>
           <Col xs={24} sm={12} md={12}>
@@ -39,16 +39,20 @@ export default function DetailPage() {
                 if (fileType === 'pdf') {
                   return (
                     <Form.Item label="Document" name={['document_url']}>
-                      <RenderButtonUrl />
+                      <RenderPdf />
                     </Form.Item>
                   );
                 }
 
-                return (
-                  <Form.Item label="Document" name={['document_url']}>
-                    <RenderImage />
-                  </Form.Item>
-                );
+                if (fileType === 'image') {
+                  return (
+                    <Form.Item label="Document" name={['document_url']}>
+                      <RenderImage />
+                    </Form.Item>
+                  );
+                }
+
+                return <></>;
               }}
             </Form.Item>
           </Col>

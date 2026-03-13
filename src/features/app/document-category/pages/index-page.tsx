@@ -1,5 +1,4 @@
-import { IndexPageWrapper, IndexTable } from '@/components';
-import { Image } from 'antd';
+import { IndexPageWrapper, IndexTable, RenderImage } from '@/components';
 import type { ColumnsType } from 'antd/es/table';
 import { Filter } from '../components';
 
@@ -9,11 +8,10 @@ export default function IndexPage() {
       title: 'Icon',
       key: 'icon_url',
       dataIndex: ['icon_url'],
-      render(value) {
+      render(value, record) {
         return (
-          <Image
-            src={value}
-            alt="Icon"
+          <RenderImage
+            value={record.id}
             className="!h-[62px] !w-[62px] object-cover"
           />
         );

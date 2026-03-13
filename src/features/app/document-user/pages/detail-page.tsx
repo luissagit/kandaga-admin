@@ -1,7 +1,7 @@
 import {
   DetailPageWrapper,
-  RenderButtonUrl,
   RenderImage,
+  RenderPdf,
   RenderText,
 } from '@/components';
 import { Col, Form, Row } from 'antd';
@@ -55,16 +55,20 @@ export default function DetailPage() {
                 if (fileType === 'pdf') {
                   return (
                     <Form.Item label="Document" name={['document_url']}>
-                      <RenderButtonUrl />
+                      <RenderPdf />
                     </Form.Item>
                   );
                 }
 
-                return (
-                  <Form.Item label="Document" name={['document_url']}>
-                    <RenderImage />
-                  </Form.Item>
-                );
+                if (fileType === 'image') {
+                  return (
+                    <Form.Item label="Document" name={['document_url']}>
+                      <RenderImage />
+                    </Form.Item>
+                  );
+                }
+
+                return <></>;
               }}
             </Form.Item>
           </Col>

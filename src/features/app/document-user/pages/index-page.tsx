@@ -1,4 +1,4 @@
-import { IndexPageWrapper } from '@/components';
+import { IndexPageWrapper, RenderImage } from '@/components';
 import { Filter } from '../components';
 import { useModuleContext } from '../context';
 import { useEffect, useState } from 'react';
@@ -81,7 +81,13 @@ export default function IndexPage() {
           return (
             <List.Item onClick={() => onClickItem(item)}>
               <List.Item.Meta
-                avatar={<img src={item?.icon_url} className="w-[48px]" />}
+                avatar={
+                  <RenderImage
+                    value={item?.id}
+                    className="w-[48px]"
+                    service={documentCategory}
+                  />
+                }
                 title={<p className="font-semibold">{item?.name}</p>}
                 description={item?.description ?? ''}
               />

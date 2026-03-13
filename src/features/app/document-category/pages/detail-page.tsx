@@ -28,7 +28,7 @@ export default function DetailPage() {
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={12}>
-            <Form.Item label="Icon" name={['icon_url']}>
+            <Form.Item label="Icon" name={['id']}>
               <RenderImage />
             </Form.Item>
           </Col>

@@ -25,6 +25,11 @@ export default function IndexPage() {
   return (
     <IndexPageWrapper filterProps={{ filterComponent: <Filter /> }}>
       <IndexTable
+        rowActionProps={{
+          showUpdate() {
+            return false;
+          },
+        }}
         columns={columns}
         filterProps={{ transformFilter: documentTransformer.filter }}
       />

@@ -32,4 +32,11 @@ export class BaseService<T> {
     const { data } = await axios.delete(`${this.endpoint}/${id}`);
     return data;
   }
+
+  async getFile(id: string | number) {
+    const { data } = await axios.get(`${this.endpoint}/${id}/file`, {
+      responseType: 'blob',
+    });
+    return data;
+  }
 }
